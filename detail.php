@@ -1,7 +1,10 @@
 <?php
+require 'inc/functions.php';
+
+$pageTitle = 'Details of Entry | My Journal';
+$page = 'detail';
 
 include 'inc/header.php';
-
 ?>
 
 <div class="entry-list single">

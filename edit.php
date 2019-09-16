@@ -1,7 +1,10 @@
 <?php
+require 'inc/functions.php';
+
+$pageTitle = 'Edit Entry | My Journal';
+$page = 'edit';
 
 include 'inc/header.php';
-
 ?>
 
 <div class="edit-entry">
