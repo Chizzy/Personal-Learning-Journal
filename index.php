@@ -1,26 +1,22 @@
 <?php
 
+require 'inc/functions.php';
+
 include 'inc/header.php';
 
 ?>
 
 <div class="entry-list">
-    <article>
-        <h2><a href="detail.html">The best day I’ve ever had</a></h2>
-        <time datetime="2016-01-31">January 31, 2016</time>
-    </article>
-    <article>
-        <h2><a href="detail_2.html">The absolute worst day I’ve ever had</a></h2>
-        <time datetime="2016-01-31">January 31, 2016</time>
-    </article>
-    <article>
-        <h2><a href="detail_3.html">That time at the mall</a></h2>
-        <time datetime="2016-01-31">January 31, 2016</time>
-    </article>
-    <article>
-        <h2><a href="detail_4.html">Dude, where’s my car?</a></h2>
-        <time datetime="2016-01-31">January 31, 2016</time>
-    </article>
+    <?php
+    
+    foreach (get_entries() as $entry) {
+        echo '<article>';
+        echo '<h2><a href="detail.html">' . $entry['title'] . '</a></h2>';
+        echo '<time datetime="' . $entry['date'] . '">January 31, 2016</time>';
+        echo '</article>';
+    }
+
+    ?>
 </div>
 
 <?php include 'inc/footer.php'?>
