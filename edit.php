@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     || $timeMatch[1] != ('hr(s)' || 'min(s)')) {
         $error_message = 'Invalid format for time spent';
     } else {
-        if (edit_entry($title, $date, $timeSpent, $learned, $resources)) {
+        if (edit_entry($id, $title, $date, $timeSpent, $learned, $resources)) {
             header("location: detail.php?entry=$id");
             exit;
         } else {
@@ -46,22 +46,22 @@ include 'inc/header.php';
     }
     ?>
     <form method="POST" action="edit.php">
-        <label for="title">Title</label>
+        <label for="title">Title<span class="required">*</span></label>
         <input id="title" type="text" name="title" value="<?php echo htmlspecialchars($title); ?>"><br>
-        <label for="date">Date</label>
+        <label for="date">Date<span class="required">*</span></label>
         <input id="date" type="date" name="date" value="<?php echo htmlspecialchars($date); ?>"><br>
-        <label for="time-spent">Time Spent</label>
+        <label for="time-spent">Time Spent<span class="required">*</span></label>
         <input id="time-spent" type="text" name="timeSpent" value="<?php echo htmlspecialchars($timeSpent); ?>"><br>
-        <label for="what-i-learned">What I Learned</label>
+        <label for="what-i-learned">What I Learned<span class="required">*</span></label>
         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo htmlspecialchars($learned); ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>
-        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"><?php echo htmlspecialchars($resources); ?></textarea>
+        <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo htmlspecialchars($resources); ?></textarea>
         <?php
         if (!empty($id)) {
             echo '<input type="hidden" name="id" value="' . $id . '">';
         }
         ?>
-        <input type="submit" value="Publish Entry" class="button">
+        <input type="submit" value="Update Entry" class="button">
         <a href="detail.php?entry=<?php echo $id; ?>" class="button button-secondary">Cancel</a>
     </form>
 </div>

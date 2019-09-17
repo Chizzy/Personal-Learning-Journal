@@ -25,8 +25,8 @@ function add_entry($title, $date, $timeSpent, $learned, $resources = null)
         $results->bindValue(1, $title, PDO::PARAM_STR);
         $results->bindValue(2, $date, PDO::PARAM_STR);
         $results->bindValue(3, $timeSpent, PDO::PARAM_STR);
-        $results->bindValue(4, $learned, PDO::PARAM_LOB);
-        $results->bindValue(5, $resources, PDO::PARAM_LOB);
+        $results->bindValue(4, $learned, PDO::PARAM_STR);
+        $results->bindValue(5, $resources, PDO::PARAM_STR);
         $results->execute();
     } catch (Exception $e) {
         echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
@@ -63,8 +63,8 @@ function edit_entry($id, $title, $date, $timeSpent, $learned, $resources = null)
         $results->bindValue(1, $title, PDO::PARAM_STR);
         $results->bindValue(2, $date, PDO::PARAM_STR);
         $results->bindValue(3, $timeSpent, PDO::PARAM_STR);
-        $results->bindValue(4, $learned, PDO::PARAM_LOB);
-        $results->bindValue(5, $resources, PDO::PARAM_LOB);
+        $results->bindValue(4, $learned, PDO::PARAM_STR);
+        $results->bindValue(5, $resources, PDO::PARAM_STR);
         $results->bindValue(6, $id, PDO::PARAM_INT);
         $results->execute();
     } catch (Exception $e) {
