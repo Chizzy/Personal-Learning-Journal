@@ -11,8 +11,8 @@ include 'inc/header.php';
     <?php
     foreach (get_all_entries() as $entry) {
         echo '<article>';
-        echo '<h2><a href="detail.html">' . $entry['title'] . '</a></h2>';
-        echo '<time datetime="' . $entry['date'] . '">January 31, 2016</time>';
+        echo '<h2><a href="detail.php?entry=' . $entry['id'] . '">' . $entry['title'] . '</a></h2>';
+        echo '<time datetime="' . $entry['date'] . '">' . date_format(date_create($entry['date']), 'F j, Y') . '</time>';
         echo '</article>';
     }
     ?>

@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $resources = trim(filter_input(INPUT_POST, 'resourcesToRemember', FILTER_SANITIZE_STRING));
 
     $timeMatch = explode(' ', $timeSpent);
-    var_dump($timeMatch[1]);
 
     if (empty($title) || empty($date) || empty($timeSpent) || empty($learned)) {
         $error_message = 'Please fill in the required fields: Title, Date, Time Spent, What I Learned';

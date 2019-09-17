@@ -7,7 +7,7 @@ function get_all_entries()
     include 'connection.php';
 
     try {
-        return $db->query('SELECT  id, title, date FROM entries');
+        return $db->query('SELECT  id, title, date FROM entries ORDER BY date DESC');
     } catch (Exception $e) {
         echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
         return [];
@@ -33,4 +33,21 @@ function add_entry($title, $date, $timeSpent, $learned, $resources = null)
         return false;
     }
     return true;
+}
+
+function get_entry($id)
+{
+    include 'connection.php';
+
+    $sql = 'SELECT id, title, date, time_spent, learned, resources FROM entries WHERE id = ?';
+
+    try {
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $id, PDO::PARAM_INT);
+        $results->execute();
+    } catch (Exception $e) {
+        echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
+        return false;
+    }
+    return $results->fetch();
 }
