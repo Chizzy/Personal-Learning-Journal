@@ -73,3 +73,19 @@ function edit_entry($id, $title, $date, $timeSpent, $learned, $resources = null)
     }
     return true;
 }
+
+function delete_entry($id) {
+    include 'connection.php';
+
+    $sql = 'DELETE FROM entries WHERE id = ?';
+
+    try {
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $id, PDO::PARAM_INT);
+        $results->execute();
+    } catch (Exception $e) {
+        echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
+        return false;
+    }
+    return true;
+}

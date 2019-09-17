@@ -238,6 +238,14 @@ input[type=submit] {
 span .required {
 	color: #ed5a5a; 
 }
+.button--delete {
+	border: 0;
+	background: transparent;
+	padding: 0;
+	margin-top: 3px;
+	font-size: 14px;
+	color: #ed5a5a;
+}
 
 
 
