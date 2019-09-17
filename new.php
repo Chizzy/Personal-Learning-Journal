@@ -42,16 +42,16 @@ include 'inc/header.php';
     }
     ?>
     <form method="POST" action="new.php">
-        <label for="title"> Title<span class="required">*</span></label>
-        <input id="title" type="text" name="title" value="<?php echo htmlspecialchars($title); ?>"><br>
+        <label for="title">Title<span class="required">*</span></label>
+        <input id="title" type="text" name="title" value="<?php echo $title; ?>"><br>
         <label for="date">Date<span class="required">*</span></label>
-        <input id="date" type="date" name="date" max="<?php echo date('Y-m-d'); ?>" value="<?php echo htmlspecialchars($date); ?>"><br>
-        <label for="time-spent"> Time Spent<span class="required">*</span></label>
-        <input id="time-spent" type="text" name="timeSpent" placeholder="hr(s) or min(s)" value="<?php echo htmlspecialchars($timeSpent); ?>"><br>
+        <input id="date" type="date" name="date" max="<?php echo date('Y-m-d'); ?>" value="<?php echo $date; ?>"><br>
+        <label for="time-spent">Time Spent<span class="required">*</span></label>
+        <input id="time-spent" type="text" name="timeSpent" placeholder="hr(s) or min(s)" value="<?php echo $timeSpent; ?>"><br>
         <label for="what-i-learned">What I Learned<span class="required">*</span></label>
-        <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo htmlspecialchars($learned); ?></textarea>
+        <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>
-        <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo htmlspecialchars($resources); ?></textarea>
+        <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo $resources; ?></textarea>
         <input type="submit" value="Publish Entry" class="button">
         <a href="index.php" class="button button-secondary">Cancel</a>
     </form>

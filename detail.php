@@ -3,10 +3,10 @@ require 'inc/functions.php';
 
 $pageTitle = 'Details of Entry | My Journal';
 $page = 'detail';
-$title = $date = $time_spent = $learned = $resources = '';
+$title = $date = $timeSpent = $learned = $resources = '';
 
 if (isset($_GET['entry'])) {
-    list($id, $title, $date, $time_spent, $learned, $resources) = get_entry(filter_input(INPUT_GET, 'entry', FILTER_SANITIZE_NUMBER_INT));
+    list($id, $title, $date, $timeSpent, $learned, $resources) = get_entry(filter_input(INPUT_GET, 'entry', FILTER_SANITIZE_NUMBER_INT));
 }
 
 include 'inc/header.php';
@@ -18,7 +18,7 @@ include 'inc/header.php';
         <time datetime="<?php echo $date; ?>"><?php echo date_format(date_create($date), 'F j, Y'); ?></time>
         <div class="entry">
             <h3>Time Spent: </h3>
-            <p><?php echo $time_spent; ?></p>
+            <p><?php echo $timeSpent; ?></p>
         </div>
         <div class="entry">
             <h3>What I Learned:</h3>
@@ -38,6 +38,6 @@ include 'inc/header.php';
 </div>
 </div>
 <div class="edit">
-<p><a href="edit.html">Edit Entry</a></p>
+<p><a href="edit.php?entry=<?php echo $id; ?>">Edit Entry</a></p>
 
 <?php include 'inc/footer.php' ?>
