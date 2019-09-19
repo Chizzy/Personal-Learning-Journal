@@ -3,10 +3,10 @@ require 'inc/functions.php';
 
 $pageTitle = 'Details of Entry | My Journal';
 $page = 'detail';
-$title = $date = $timeSpent = $learned = $resources = '';
+$title = $date = $timeSpent = $learned = $resources = $name = '';
 
 if (isset($_GET['entry'])) {
-    list($id, $title, $date, $timeSpent, $learned, $resources) = get_entry(filter_input(INPUT_GET, 'entry', FILTER_SANITIZE_NUMBER_INT));
+    list($id, $title, $date, $timeSpent, $learned, $resources, $name) = get_entry(filter_input(INPUT_GET, 'entry', FILTER_SANITIZE_NUMBER_INT));
 }
 
 include 'inc/header.php';
@@ -32,6 +32,22 @@ include 'inc/header.php';
             echo "<li><a href=''>$resources</a></li>";
             echo '</ul>';
             echo '</div>';
+        }
+        if ($name != null) {
+            $multiTagNames = explode(' ', $name);
+            if (count($multiTagNames) > 1) {
+                echo '<div class="entry">';
+                echo '<h3>Tags:</h3>';
+                foreach ($multiTagNames as $tagName) {
+                    echo '<p><a href="tags.php?name=' . $tagName . '">' . $tagName . '</a></p>';
+                }
+                echo '</div>';
+            } else {
+                echo '<div class="entry">';
+                echo '<h3>Tags:</h3>';
+                echo '<p><a href="tags.php?name=' . $multiTagNames[0] . '">' . $multiTagNames[0] . '</a></p>';
+                echo '</div>';
+            }
         }
         ?>
     </article>

@@ -6,8 +6,13 @@ function get_all_entries()
 {
     include 'connection.php';
 
+    $sql = "SELECT  entries.id, entries.title, entries.date, GROUP_CONCAT(tags.name, ' ') AS name FROM entries
+        LEFT OUTER JOIN the_link ON entries.id = the_link.entry_id 
+        LEFT OUTER JOIN tags ON the_link.tags_id = tags.id
+        GROUP BY entries.id ORDER BY date DESC";
+
     try {
-        return $db->query('SELECT  id, title, date FROM entries ORDER BY date DESC');
+        return $db->query($sql);
     } catch (Exception $e) {
         echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
         return [];
@@ -39,7 +44,12 @@ function get_entry($id)
 {
     include 'connection.php';
 
-    $sql = 'SELECT id, title, date, time_spent, learned, resources FROM entries WHERE id = ?';
+    $sql = "SELECT entries.id, entries.title, entries.date, entries.time_spent, entries.learned, entries.resources, GROUP_CONCAT(tags.name, ' ') AS name
+        FROM entries 
+        LEFT OUTER JOIN the_link ON entries.id = the_link.entry_id 
+        LEFT OUTER JOIN tags ON the_link.tags_id = tags.id
+        WHERE entries.id = ?
+        GROUP BY entries.id ORDER BY date DESC";
 
     try {
         $results = $db->prepare($sql);
@@ -88,4 +98,26 @@ function delete_entry($id) {
         return false;
     }
     return true;
+}
+
+function get_tags($name) 
+{
+    include 'connection.php';
+
+    $sql = 'SELECT entries.id, entries.title, entries.date, tags.name
+        FROM entries 
+        LEFT OUTER JOIN the_link ON entries.id = the_link.entry_id 
+        LEFT OUTER JOIN tags ON the_link.tags_id = tags.id
+        WHERE tags.name = ?
+        ORDER BY date DESC';
+
+    try {
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $name, PDO::PARAM_STR);
+        $results->execute();
+    } catch (Exception $e) {
+        echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
+        return false;
+    }
+    return $results->fetchAll(PDO::FETCH_ASSOC);
 }

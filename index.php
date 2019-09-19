@@ -20,6 +20,28 @@ if (isset($_GET['msg'])) {
 include 'inc/header.php';
 ?>
 
+<style>
+    .button--delete {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        margin-top: 3px;
+        font-size: 14px;
+        color: #ed5a5a;
+}
+.message {
+        background-color: #ed5a5a;
+        border-radius: 4px;
+        padding: 1.5rem;
+        color: #fff;
+        text-align: left;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+    }
+</style>
+
 <div class="entry-list">
     <?php
     if (isset($error_message)) {
@@ -30,7 +52,15 @@ include 'inc/header.php';
         echo '<article>';
         echo '<h2><a href="detail.php?entry=' . $entry['id'] . '">' . $entry['title'] . '</a></h2>';
         echo '<time datetime="' . $entry['date'] . '">' . date_format(date_create($entry['date']), 'F j, Y') . '</time>';
-        echo '<form method="POST" action="index.php" onsubmit="return confirm("Are you sure you want to delete this entry?"); ">';
+        $multiTagNames = explode(' ', $entry['name']);
+        if (count($multiTagNames) > 1) {
+            foreach ($multiTagNames as $tagName) {
+                echo '<p><a href="tags.php?name=' . $tagName . '">' . $tagName . '</a></p>';
+            }
+        } else {
+            echo '<p><a href="tags.php?name=' . $multiTagNames[0] . '">' . $multiTagNames[0] . '</a></p>';
+        }
+        echo "<form method='POST' action='index.php' onsubmit=\"return confirm('Are you sure you want to delete this entry?'); \">";
         echo '<input type="hidden" name="delete" value="' . $entry['id'] . '">';
         echo '<input type="submit" class="button--delete" value="Delete">';
         echo '</form>';
@@ -39,4 +69,4 @@ include 'inc/header.php';
     ?>
 </div>
 
-<?php include 'inc/footer.php'?>
+<?php include 'inc/footer.php'; ?>

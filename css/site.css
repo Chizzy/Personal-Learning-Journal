@@ -224,28 +224,6 @@ form textarea:hover {
 input[type=submit] {
 	margin-right: 5px;
 }
-.message {
-	background-color: #ed5a5a;
-	border-radius: 4px;
-	padding: 1.5rem;
-	color: #fff;
-	text-align: left;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	-ms-border-radius: 4px;
-	-o-border-radius: 4px;
-}
-span .required {
-	color: #ed5a5a; 
-}
-.button--delete {
-	border: 0;
-	background: transparent;
-	padding: 0;
-	margin-top: 3px;
-	font-size: 14px;
-	color: #ed5a5a;
-}
 
 
 

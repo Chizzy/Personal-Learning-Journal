@@ -34,6 +34,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 include 'inc/header.php';
 ?>
 
+<style>
+    .message {
+        background-color: #ed5a5a;
+        border-radius: 4px;
+        padding: 1.5rem;
+        color: #fff;
+        text-align: left;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+    }
+    .required {
+        color: #ed5a5a; 
+    }
+</style>
+
 <div class="new-entry">
     <h2>New Entry</h2>
     <?php
