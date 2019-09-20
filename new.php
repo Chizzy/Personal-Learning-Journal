@@ -90,8 +90,7 @@ include 'inc/header.php';
         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>
         <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo $resources; ?></textarea>
-        
-        <label for="tags">Tags</label>
+        <!-- <label for="tags">Tags</label>
         <input list="tagsList" id="tags" type="text" name="tags" value="<?php echo $tags; ?>">
         <datalist id="tagsList">
             <?php
@@ -99,7 +98,7 @@ include 'inc/header.php';
                 echo '<option value="' . $tag . '">';
             }
             ?>
-        </datalist>
+        </datalist> -->
         <input type="submit" value="Publish Entry" class="button">
         <a href="index.php" class="button button-secondary">Cancel</a>
     </form>
