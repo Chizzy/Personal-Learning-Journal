@@ -5,7 +5,7 @@ $page = 'tags';
 
 if (isset($_GET['name'])) {
     $pageTitle = ucfirst($_GET['name'])  . " Tags | My Journal";
-    $tags = get_tags(filter_input(INPUT_GET, 'name', FILTER_SANITIZE_STRING));
+    $tags = get_specific_tag(filter_input(INPUT_GET, 'name', FILTER_SANITIZE_STRING));
 }
 
 include 'inc/header.php';

@@ -19,11 +19,38 @@ function get_all_entries()
     }
 }
 
-function add_entry($title, $date, $timeSpent, $learned, $resources = null)
+function get_tags() 
 {
     include 'connection.php';
 
+    try {
+        $tagsArray = [];
+        $tags = $db->query('SELECT name FROM tags')->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($tags as $tag) {
+            $tagsArray[] = $tag['name'];
+        }
+        return $tagsArray;
+    } catch (Exception $e) {
+        echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
+        return [];
+    }
+}
+
+function add_entry($title, $date, $timeSpent, $learned, $resources = null, $tags = null)
+{
+    include 'connection.php';
+
+    // $sql = 'BEGIN;';
+
     $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
+    // if ((in_array($tags, get_tags())) == false) {
+    //     $sql .= 'INSERT INTO tags (name) VALUES (?);';
+    // }
+    // if ($tags != null) {
+    //     $sql .= 'INSERT INTO the_link (entry_id, tags_id) VALUES (last_insert_rowid(2), last_insert_rowid());';
+    // }
+
+    // $sql .= 'COMMIT;';
 
     try {
         $results = $db->prepare($sql);
@@ -32,6 +59,7 @@ function add_entry($title, $date, $timeSpent, $learned, $resources = null)
         $results->bindValue(3, $timeSpent, PDO::PARAM_STR);
         $results->bindValue(4, $learned, PDO::PARAM_STR);
         $results->bindValue(5, $resources, PDO::PARAM_STR);
+        // $results->bindValue(6, $tags, PDO::PARAM_STR);
         $results->execute();
     } catch (Exception $e) {
         echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
@@ -100,7 +128,7 @@ function delete_entry($id) {
     return true;
 }
 
-function get_tags($name) 
+function get_specific_tag($name) 
 {
     include 'connection.php';
 

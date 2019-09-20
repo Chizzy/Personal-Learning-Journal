@@ -3,7 +3,7 @@ require 'inc/functions.php';
 
 $pageTitle = 'New Entry | My Journal';
 $page = 'new';
-$title = $date = $timeSpent = $learned = $resources = '';
+$title = $date = $timeSpent = $learned = $resources = $tags = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $timeSpent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'resourcesToRemember', FILTER_SANITIZE_STRING));
+    $tags = trim(filter_input(INPUT_POST, 'tags', FILTER_SANITIZE_STRING));
 
     $timeMatch = explode(' ', $timeSpent);
 
@@ -22,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     || $timeMatch[1] != ('hr(s)' || 'min(s)')) {
         $error_message = 'Invalid format for time spent';
     } else {
-        if (add_entry($title, $date, $timeSpent, $learned, $resources)) {
+        if (add_entry($title, $date, $timeSpent, $learned, $resources, $tags)) {
             header('location: index.php');
             exit;
         } else {
@@ -49,6 +50,26 @@ include 'inc/header.php';
     .required {
         color: #ed5a5a; 
     }
+    form label {
+        display: block;
+        margin-bottom: 8px;
+    }
+    form input[type=text] {
+        border: 2px solid #e1e1e1;
+        font-size: 18px;
+        line-height: 1.8em;
+        padding:10px 13px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+        width: calc(100% - 32px);
+    } 
+    form input[type=text]:focus {
+        outline: 0;
+	    border-color: #678f89;
+    }
+    form input[type=text]:hover {
+        border-color: #678f89;
+    }
 </style>
 
 <div class="new-entry">
@@ -69,6 +90,16 @@ include 'inc/header.php';
         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>
         <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo $resources; ?></textarea>
+        
+        <label for="tags">Tags</label>
+        <input list="tagsList" id="tags" type="text" name="tags" value="<?php echo $tags; ?>">
+        <datalist id="tagsList">
+            <?php
+            foreach (get_tags() as $tag) {
+                echo '<option value="' . $tag . '">';
+            }
+            ?>
+        </datalist>
         <input type="submit" value="Publish Entry" class="button">
         <a href="index.php" class="button button-secondary">Cancel</a>
     </form>
