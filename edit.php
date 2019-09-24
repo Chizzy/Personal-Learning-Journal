@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (count($timeMatch) != 2 
                     || is_numeric($timeMatch[0]) == false 
                     || (!in_array($timeMatch[1], ['hr(s)','min(s)'], true))) {
-        $error_message = 'Invalid format for Time Spent';
+        $error_message = 'Invalid format for Time Spent. Use hr(s) or min(s).';
     } else {
         if (edit_entry($id, $title, $date, $timeSpent, $learned, $resources)) {
             header("location: detail.php?entry=$id");

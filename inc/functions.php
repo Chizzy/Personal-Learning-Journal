@@ -40,29 +40,45 @@ function add_entry($title, $date, $timeSpent, $learned, $resources = null, $tags
 {
     include 'connection.php';
 
-    // $sql = 'BEGIN;';
-
-    $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
-    // if ((in_array($tags, get_tags())) == false) {
-    //     $sql .= 'INSERT INTO tags (name) VALUES (?);';
-    // }
     // if ($tags != null) {
     //     $sql .= 'INSERT INTO the_link (entry_id, tags_id) VALUES (last_insert_rowid(2), last_insert_rowid());';
     // }
 
-    // $sql .= 'COMMIT;';
-
     try {
+        $db->beginTransaction();
+
+        $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
         $results = $db->prepare($sql);
         $results->bindValue(1, $title, PDO::PARAM_STR);
         $results->bindValue(2, $date, PDO::PARAM_STR);
         $results->bindValue(3, $timeSpent, PDO::PARAM_STR);
         $results->bindValue(4, $learned, PDO::PARAM_STR);
         $results->bindValue(5, $resources, PDO::PARAM_STR);
-        // $results->bindValue(6, $tags, PDO::PARAM_STR);
         $results->execute();
+        $entry_id = $db->lastInsertId();
+
+        if (isset($tags) && (in_array($tags, get_tags())) == false) {
+            $sql = 'INSERT INTO tags (name) VALUES (?)';
+            $results = $db->prepare($sql);
+            $results->bindValue(1, $tags, PDO::PARAM_STR);
+            $results->execute();
+            $tags_id = $db->lastInsertId();
+        } elseif (isset($tags)) {
+            $sql = 'SELECT id FROM tags WHERE name = ?';
+            $results = $db->prepare($sql);
+            $results->bindValue(1, $tags, PDO::PARAM_STR);
+            $results->execute();
+            $tags_id = $results->fetch();
+        }
+
+        $sql = "INSERT INTO the_link (entry_id, tags_id) VALUES ($entry_id, $tags_id)";
+        $db->query($sql);
+
+        $db->commit();
+
     } catch (Exception $e) {
         echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
+        $db->rollBack();
         return false;
     }
     return true;

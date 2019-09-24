@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (count($timeMatch) != 2 
                     || is_numeric($timeMatch[0]) == false 
                     || (!in_array($timeMatch[1], ['hr(s)','min(s)'], true))) {
-        $error_message = 'Invalid format for Time Spent';
+        $error_message = 'Invalid format for Time Spent. Use hr(s) or min(s).';
     } else {
         if (add_entry($title, $date, $timeSpent, $learned, $resources, $tags)) {
             header('location: index.php');
@@ -85,12 +85,12 @@ include 'inc/header.php';
         <label for="date">Date<span class="required">*</span></label>
         <input id="date" type="date" name="date" max="<?php echo date('Y-m-d'); ?>" value="<?php echo $date; ?>"><br>
         <label for="time-spent">Time Spent<span class="required">*</span></label>
-        <input id="time-spent" type="text" name="timeSpent" placeholder="hr(s) or min(s)" value="<?php echo $timeSpent; ?>"><br>
+        <input id="time-spent" type="text" name="timeSpent" placeholder="Use hr(s) or min(s)" value="<?php echo $timeSpent; ?>"><br>
         <label for="what-i-learned">What I Learned<span class="required">*</span></label>
         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>
         <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo $resources; ?></textarea>
-        <!-- <label for="tags">Tags</label>
+        <label for="tags">Tags</label>
         <input list="tagsList" id="tags" type="text" name="tags" value="<?php echo $tags; ?>">
         <datalist id="tagsList">
             <?php
@@ -98,7 +98,7 @@ include 'inc/header.php';
                 echo '<option value="' . $tag . '">';
             }
             ?>
-        </datalist> -->
+        </datalist>
         <input type="submit" value="Publish Entry" class="button">
         <a href="index.php" class="button button-secondary">Cancel</a>
     </form>
