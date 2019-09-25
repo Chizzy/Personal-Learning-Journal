@@ -84,8 +84,8 @@ include 'inc/header.php';
         <input id="title" type="text" name="title" value="<?php echo $title; ?>"><br>
         <label for="date">Date<span class="required">*</span></label>
         <input id="date" type="date" name="date" max="<?php echo date('Y-m-d'); ?>" value="<?php echo $date; ?>"><br>
-        <label for="time-spent">Time Spent<span class="required">*</span></label>
-        <input id="time-spent" type="text" name="timeSpent" placeholder="Use hr(s) or min(s)" value="<?php echo $timeSpent; ?>"><br>
+        <label for="time-spent">Time Spent<span class="required">*</span> <i>Use hr(s) or min(s)</i></label>
+        <input id="time-spent" type="text" name="timeSpent" placeholder="Example: 3 min(s)" value="<?php echo $timeSpent; ?>"><br>
         <label for="what-i-learned">What I Learned<span class="required">*</span></label>
         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>

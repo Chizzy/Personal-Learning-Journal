@@ -3,10 +3,10 @@ require 'inc/functions.php';
 
 $pageTitle = 'Edit Entry | My Journal';
 $page = 'edit';
-$title = $date = $timeSpent = $learned = $resources = '';
+$title = $date = $timeSpent = $learned = $resources = $tags = '';
 
 if (isset($_GET['entry'])) {
-    list($id, $title, $date, $timeSpent, $learned, $resources) = get_entry(filter_input(INPUT_GET, 'entry', FILTER_SANITIZE_NUMBER_INT));
+    list($id, $title, $date, $timeSpent, $learned, $resources, $tags) = get_entry(filter_input(INPUT_GET, 'entry', FILTER_SANITIZE_NUMBER_INT));
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $timeSpent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'resourcesToRemember', FILTER_SANITIZE_STRING));
+    $tags = trim(filter_input(INPUT_POST, 'tags', FILTER_SANITIZE_STRING));
 
     $timeMatch = explode(' ', $timeSpent);
 
@@ -67,12 +68,21 @@ include 'inc/header.php';
         <input id="title" type="text" name="title" value="<?php echo htmlspecialchars($title); ?>"><br>
         <label for="date">Date<span class="required">*</span></label>
         <input id="date" type="date" name="date" value="<?php echo htmlspecialchars($date); ?>"><br>
-        <label for="time-spent">Time Spent<span class="required">*</span></label>
+        <label for="time-spent">Time Spent<span class="required">*</span> <i>Use hr(s) or min(s)</i></label>
         <input id="time-spent" type="text" name="timeSpent" value="<?php echo htmlspecialchars($timeSpent); ?>"><br>
         <label for="what-i-learned">What I Learned<span class="required">*</span></label>
         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo htmlspecialchars($learned); ?></textarea>
         <label for="resources-to-remember">Resources to Remember</label>
         <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo htmlspecialchars($resources); ?></textarea>
+        <label for="tags">Tags</label>
+        <input list="tagsList" id="tags" type="text" name="tags" value="<?php echo htmlspecialchars($tags); ?>">
+        <datalist id="tagsList">
+            <?php
+            foreach (get_tags() as $tag) {
+                echo '<option value="' . $tag . '">';
+            }
+            ?>
+        </datalist>
         <?php
         if (!empty($id)) {
             echo '<input type="hidden" name="id" value="' . $id . '">';
