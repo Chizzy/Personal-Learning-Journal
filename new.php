@@ -5,6 +5,10 @@ $pageTitle = 'New Entry | My Journal';
 $page = 'new';
 $title = $date = $timeSpent = $learned = $resources = $tags = '';
 
+if (isset($_POST['tags'])) {
+    $_POST['tags'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
@@ -12,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $timeSpent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'resourcesToRemember', FILTER_SANITIZE_STRING));
-    $tags = trim(filter_input(INPUT_POST, 'tags', FILTER_SANITIZE_STRING));
+    $tags = filter_input(INPUT_POST, 'tags', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
     $timeMatch = explode(' ', $timeSpent);
 
@@ -54,21 +58,24 @@ include 'inc/header.php';
         display: block;
         margin-bottom: 8px;
     }
-    form input[type=text] {
+    form select, .select2-container {
         border: 2px solid #e1e1e1;
         font-size: 18px;
         line-height: 1.8em;
         padding:10px 13px;
         margin-bottom: 30px;
         border-radius: 4px;
-        width: calc(100% - 32px);
-    } 
-    form input[type=text]:focus {
+        width: 100%;
+    }
+    form select:focus, .select2-container:focus {
         outline: 0;
 	    border-color: #678f89;
     }
-    form input[type=text]:hover {
+    form select:hover, .select2-container:hover {
         border-color: #678f89;
+    }
+    .select2-container .selection .select2-selection {
+        border: none;
     }
 </style>
 
@@ -91,14 +98,27 @@ include 'inc/header.php';
         <label for="resources-to-remember">Resources to Remember</label>
         <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo $resources; ?></textarea>
         <label for="tags">Tags</label>
-        <input list="tagsList" id="tags" type="text" name="tags" value="<?php echo $tags; ?>">
-        <datalist id="tagsList">
+        <!-- Using Select2 https://select2.org/tagging to create the multiple select -->
+        <select id="tags" name="tags[]" class="form-control" multiple>
             <?php
             foreach (get_tags() as $tag) {
-                echo '<option value="' . $tag . '">';
+                echo "<option value='$tag'";
+                if (isset($_POST['tags']) && in_array($tag, $_POST['tags'])) {
+                    echo ' selected';
+                }
+                echo ">$tag";
+                echo '</option>';
             }
             ?>
-        </datalist>
+        </select>
+        <script>
+            $(document).ready(function() {
+                $("#tags").select2({
+                    tags: true,
+                    placeholder: 'Type out tags then hit enter after each one OR Select from dropdown'
+                });
+            });
+        </script>
         <input type="submit" value="Publish Entry" class="button">
         <a href="index.php" class="button button-secondary">Cancel</a>
     </form>

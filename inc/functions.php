@@ -53,23 +53,28 @@ function add_entry($title, $date, $timeSpent, $learned, $resources = null, $tags
         $results->execute();
         $entry_id = $db->lastInsertId();
 
-        if (isset($tags) && (in_array($tags, get_tags())) == false) {
-            $sql = 'INSERT INTO tags (name) VALUES (?)';
-            $results = $db->prepare($sql);
-            $results->bindValue(1, $tags, PDO::PARAM_STR);
-            $results->execute();
-            $tags_id = $db->lastInsertId();
-        } elseif (isset($tags)) {
-            $sql = 'SELECT id FROM tags WHERE name = ?';
-            $results = $db->prepare($sql);
-            $results->bindValue(1, $tags, PDO::PARAM_STR);
-            $results->execute();
-            $tags_id = $results->fetch();
-            $tags_id = $tags_id[0];
-        }
+        foreach ($tags as $tag) {
+            if (isset($tag) && (in_array($tag, get_tags())) == false) {
+                $sql = 'INSERT INTO tags (name) VALUES (?)';
+                $results = $db->prepare($sql);
+                $results->bindValue(1, $tag, PDO::PARAM_STR);
+                $results->execute();
+                $tags_id = $db->lastInsertId();
 
-        $sql = "INSERT INTO the_link (entry_id, tags_id) VALUES ($entry_id, $tags_id)";
-        $db->query($sql);
+                $sql = "INSERT INTO the_link (entry_id, tags_id) VALUES ($entry_id, $tags_id)";
+                $db->query($sql);
+            } elseif (isset($tag)) {
+                $sql = 'SELECT id FROM tags WHERE name = ?';
+                $results = $db->prepare($sql);
+                $results->bindValue(1, $tag, PDO::PARAM_STR);
+                $results->execute();
+                $tags_id = $results->fetch();
+                $tags_id = $tags_id[0];
+
+                $sql = "INSERT INTO the_link (entry_id, tags_id) VALUES ($entry_id, $tags_id)";
+                $db->query($sql);
+            }
+        }
 
         $db->commit();
 
@@ -110,6 +115,11 @@ function edit_entry($id, $title, $date, $timeSpent, $learned, $resources = null,
     try {
         $db->beginTransaction();
 
+        $sql = 'DELETE FROM the_link WHERE entry_id = ?';
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $id, PDO::PARAM_INT);
+        $results->execute();
+
         $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
         $results = $db->prepare($sql);
         $results->bindValue(1, $title, PDO::PARAM_STR);
@@ -120,23 +130,28 @@ function edit_entry($id, $title, $date, $timeSpent, $learned, $resources = null,
         $results->bindValue(6, $id, PDO::PARAM_INT);
         $results->execute();
 
-        if (isset($tags) && (in_array($tags, get_tags())) == false) {
-            $sql = 'INSERT INTO tags (name) VALUES (?)';
-            $results = $db->prepare($sql);
-            $results->bindValue(1, $tags, PDO::PARAM_STR);
-            $results->execute();
-            $tags_id = $db->lastInsertId();
-        } elseif (isset($tags)) {
-            $sql = 'SELECT id FROM tags WHERE name = ?';
-            $results = $db->prepare($sql);
-            $results->bindValue(1, $tags, PDO::PARAM_STR);
-            $results->execute();
-            $tags_id = $results->fetch();
-            $tags_id = $tags_id[0];
-        }
+        foreach ($tags as $tag) {
+            if (isset($tag) && (in_array($tag, get_tags())) == false) {
+                $sql = 'INSERT INTO tags (name) VALUES (?)';
+                $results = $db->prepare($sql);
+                $results->bindValue(1, $tag, PDO::PARAM_STR);
+                $results->execute();
+                $tags_id = $db->lastInsertId();
 
-        $sql = "UPDATE the_link SET tags_id = $tags_id WHERE entry_id = $id";
-        $db->query($sql);
+                $sql = "INSERT INTO the_link (entry_id, tags_id) VALUES ($id, $tags_id)";
+                $db->query($sql);
+            } elseif (isset($tag)) {
+                $sql = 'SELECT id FROM tags WHERE name = ?';
+                $results = $db->prepare($sql);
+                $results->bindValue(1, $tag, PDO::PARAM_STR);
+                $results->execute();
+                $tags_id = $results->fetch();
+                $tags_id = $tags_id[0];
+
+                $sql = "INSERT INTO the_link (entry_id, tags_id) VALUES ($id, $tags_id)";
+                $db->query($sql);
+            }
+        }
 
         $db->commit();
 
@@ -151,14 +166,24 @@ function edit_entry($id, $title, $date, $timeSpent, $learned, $resources = null,
 function delete_entry($id) {
     include 'connection.php';
 
-    $sql = 'DELETE FROM entries WHERE id = ?';
-
     try {
+        $db->beginTransaction();
+
+        $sql = 'DELETE FROM entries WHERE id = ?';
         $results = $db->prepare($sql);
         $results->bindValue(1, $id, PDO::PARAM_INT);
         $results->execute();
+
+        $sql = 'DELETE FROM the_link WHERE entry_id = ?';
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $id, PDO::PARAM_INT);
+        $results->execute();
+
+        $db->commit();
+
     } catch (Exception $e) {
         echo 'ERROR!: ' . $e->getMessage() . ' 😕 <br>';
+        $db->rollBack();
         return false;
     }
     return true;
