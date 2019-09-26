@@ -116,6 +116,11 @@ include 'inc/header.php';
             }
             ?>
         </select>
+        <?php
+        if (!empty($id)) {
+            echo '<input type="hidden" name="id" value="' . $id . '">';
+        }
+        ?>
         <script>
             $(document).ready(function() {
                 $("#tags").select2({
